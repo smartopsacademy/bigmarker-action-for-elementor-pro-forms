@@ -47,11 +47,6 @@ class BigMarker_Action_After_Submit extends \ElementorPro\Modules\Forms\Classes\
 			return;
 		}
 
-		//  Make sure that there is a BigMarker channel
-		if ( empty( $settings['bigmarker_channel'] ) ) {
-			return;
-		}
-
 		// Get submitted Form data
 		$raw_fields = $record->get( 'fields' );
 
@@ -66,40 +61,75 @@ class BigMarker_Action_After_Submit extends \ElementorPro\Modules\Forms\Classes\
 		if ( empty( $fields[ 'email' ] ) ) {
 			return;
 		}
+		if ( empty( $fields[ 'firstname' ] ) ) {
+			return;
+		}
+		if ( empty( $fields[ 'lastname' ] ) ) {
+			return;
+		}
 
-		// If we got this far we can start building our request data
-		// Based on the param list at https://docs.bigmarker.com/#register-a-user-to-a-conference
-		$bigmarker_channel_data = [
-			'email' => $fields[ 'email' ],
-			'first_name' => $fields[ 'firstname' ],
-			'last_name' => $fields[ 'lastname' ]
-		];
-		// Based on the param list at https://docs.bigmarker.com/#add-a-subscriber
-		$bigmarker_conference_data = [
-			'id' => $fields[ 'webinar' ],
-			'email' => $fields[ 'email' ],
-			'first_name' => $fields[ 'firstname' ],
-			'last_name' => $fields[ 'lastname' ],
-			'utm_bmcr_source' => $fields[ 'utm_bmcr_source' ],
-			'custom_user_id' => get_current_user_id()
-		];
+		$bigmarker_url = 'https://www.bigmarker.com/api/v1/';
+		$current_user_id = get_current_user_id();
 
-    $bigmarker_url = 'https://www.bigmarker.com/api/v1/';
-    $channel_endpoint = $bigmarker_url . 'channels/' . $settings['bigmarker_channel'] . '/add_subscriber';
-		$conference_endpoint = $bigmarker_url . 'conferences/register';
 		// Subscribe the user to the channel
-		wp_remote_post( $channel_endpoint, array(
-			'method' => 'PUT',
-			'headers' => array('Content-Type' => 'application/json', 'accept' => 'application/json', 'API-KEY' => $settings['bigmarker_api_key']),
-			'body' => json_encode($bigmarker_channel_data),
-			));
-		// Register the user to the webinar (conference)
-		wp_remote_post( $conference_endpoint, array(
-			'method' => 'PUT',
-			'headers' => array('Content-Type' => 'application/json', 'accept' => 'application/json', 'API-KEY' => $settings['bigmarker_api_key']),
-			'body' => json_encode($bigmarker_conference_data),
+		// Based on the param list at https://docs.bigmarker.com/#add-a-subscriber
+		if ( !empty( $settings['bigmarker_channel'] ) ) {
+			$bigmarker_channel_data = [
+				'email' => $fields[ 'email' ],
+				'first_name' => $fields[ 'firstname' ],
+				'last_name' => $fields[ 'lastname' ]
+			];
+			$channel_endpoint = $bigmarker_url . 'channels/' . $settings['bigmarker_channel'] . '/add_subscriber';
+			$response = wp_remote_post( $channel_endpoint, array(
+				'method' => 'PUT',
+				'headers' => array('Content-Type' => 'application/json', 'accept' => 'application/json', 'API-KEY' => $settings['bigmarker_api_key']),
+				'body' => json_encode($bigmarker_channel_data),
 			));
 
+			if ( is_wp_error( $response ) ) {
+			  return $response->get_error_message();
+			} else {
+				$bigmarker_subscriber_data = json_decode($response['body'],true);
+				if ( !empty($bigmarker_subscriber_data['error']) ) {
+					return $bigmarker_subscriber_data['error'];
+				}
+				if ( !empty($bigmarker_subscriber_data['bmid']) && is_user_logged_in() ) {
+					update_user_meta( $current_user_id, 'bmid', $bigmarker_subscriber_data['bmid'] );
+				}
+			}
+		}
+
+		// Register the user to the webinar (conference)
+		// Based on the param list at https://docs.bigmarker.com/#register-a-user-to-a-conference
+		if ( !empty( $fields[ 'webinar' ] ) ) {
+			$conference_endpoint = $bigmarker_url . 'conferences/register';
+			$bigmarker_conference_data = [
+				'id' => $fields[ 'webinar' ],
+				'email' => $fields[ 'email' ],
+				'first_name' => $fields[ 'firstname' ],
+				'last_name' => $fields[ 'lastname' ]
+			];
+			if (!empty($fields[ 'utm_bmcr_source' ])) $bigmarker_conference_data['utm_bmcr_source'] = $fields[ 'utm_bmcr_source' ];
+			if (is_user_logged_in()) $bigmarker_conference_data['custom_user_id'] = $current_user_id;
+
+			$response = wp_remote_post( $conference_endpoint, array(
+				'method' => 'PUT',
+				'headers' => array('Content-Type' => 'application/json', 'accept' => 'application/json', 'API-KEY' => $settings['bigmarker_api_key']),
+				'body' => json_encode($bigmarker_conference_data),
+			));
+
+			if ( is_wp_error( $response ) ) {
+			  return $response->get_error_message();
+			} else {
+				$bigmarker_attendee_data = json_decode($response['body'],true);
+				if ( !empty($bigmarker_attendee_data['error']) ) {
+					return $bigmarker_attendee_data['error'];
+				}
+				if ( !empty($bigmarker_attendee_data['conference_url']) && is_user_logged_in() ) {
+					update_user_meta( $current_user_id, 'bigmarker_conference_url', $bigmarker_attendee_data['conference_url'] );
+				}
+			}
+		}
 	}
 
 	/**
