@@ -70,5 +70,14 @@ No, you don't and that's the main reason that I created this plugin, so you can 
 
 == Changelog ==
 
+= 1.1.0 - 2021-01-22 =
+* Tweak: only subscribe to the channel if the channel name is specified
+* Tweak: only add to the webinar if the webinar field exists and not empty
+* New: Handle API responses
+* New: Add the returned bmid info as a custom field (bmid) to the user
+* New: Add the returned webinar url (conference link) as a custom field to the user (bigmarker_conference_url)
+* Tweak: only add the user_id to the json (conference registration) if the user is logged in
+* Tweak: only add the utm_bmcr_source info to the json (conference registration) if it's not empty
+
 = 1.0.0 - 2021-01-21 =
 * Initial Release

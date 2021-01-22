@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Elementor Pro Forms BigMarker
  * Description: Plugin to extend Elementor forms with BigMarker.
- * Version:     1.0.0
+ * Version:     1.1.0
  * Requires at least: 5.5
  * Requires PHP: 7.3
  * Author:      Krisztian Czako
