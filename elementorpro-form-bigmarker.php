@@ -3,7 +3,7 @@
 /**
  * Plugin Name: BigMarker Action for Elementor Pro Forms
  * Description: Plugin to extend Elementor forms with BigMarker.
- * Version:     1.1.0
+ * Version:     1.1.1
  * Requires at least: 5.5
  * Requires PHP: 7.3
  * Author:      Krisztian Czako

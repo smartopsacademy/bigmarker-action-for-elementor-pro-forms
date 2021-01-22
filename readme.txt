@@ -70,6 +70,9 @@ No, you don't and that's the main reason that I created this plugin, so you can 
 
 == Changelog ==
 
+= 1.1.1 - 2021-01-22 =
+* Changed name to comply Wordpress restrictions
+
 = 1.1.0 - 2021-01-22 =
 * Tweak: only subscribe to the channel if the channel name is specified
 * Tweak: only add to the webinar if the webinar field exists and not empty
