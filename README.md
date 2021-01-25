@@ -1,4 +1,4 @@
-# BigMarker support for Elementor Forms
+# BigMarker actions for Elementor Pro Forms
 
 Simple solution for users of BigMarker and Elementor. This plugin will allow you to add channel subscribers and register webinar attendees via Elementor's Pro form widget.
 
@@ -49,6 +49,11 @@ Yes, all the other form widget integrations will be available. You can even use 
 No, you don't and that's the main reason that I created this plugin, so you can integrate both BigMarker and Elementor without knowing how to code.
 
 ## Changelog
+
+### 1.1.2 - 2021-01-25
+* Reorganised files into the includes/ dir
+* Only init the class if the relevant Elementor Pro class exists to prevent fatal errors
+* Moved action init to the main class as a public function
 
 ### 1.1.1 - 2021-01-22
 * Changed name to comply Wordpress restrictions

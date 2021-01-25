@@ -3,14 +3,15 @@
 /**
  * Plugin Name: BigMarker Action for Elementor Pro Forms
  * Description: Plugin to extend Elementor forms with BigMarker.
- * Version:     1.1.1
+ * Plugin URI: https://wordpress.org/plugins/bigmarker-action-for-elementor-pro-forms
+ * Version:     1.1.2
  * Requires at least: 5.5
  * Requires PHP: 7.3
  * Author:      Krisztian Czako
  * Author URI:  https://devopsakademia.com/
  * License: GPL v3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Text Domain: elementorpro-form-bigmarker
+ * Text Domain: bigmarker-action-for-elementor-pro-forms
  * Domain Path: /languages
  */
 
@@ -25,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-final class ElementorPro_Forms_BigMarker {
+final class BigMarker_Action_for_Elementor_Pro_Forms {
 
     /**
      * Plugin Version
@@ -62,7 +63,7 @@ final class ElementorPro_Forms_BigMarker {
      * @access private
      * @static
      *
-     * @var ElementorPro_Forms_BigMarker The single instance of the class.
+     * @var BigMarker_Action_for_Elementor_Pro_Forms The single instance of the class.
      */
     private static $_instance = null;
 
@@ -76,7 +77,7 @@ final class ElementorPro_Forms_BigMarker {
      * @access public
      * @static
      *
-     * @return ElementorPro_Forms_BigMarker An instance of the class.
+     * @return BigMarker_Action_for_Elementor_Pro_Forms An instance of the class.
      */
     public static function instance() {
 
@@ -114,7 +115,7 @@ final class ElementorPro_Forms_BigMarker {
      */
     public function i18n() {
 
-        load_plugin_textdomain( 'elementorpro-form-bigmarker' );
+        load_plugin_textdomain( 'bigmarker-action-for-elementor-pro-forms' );
 
     }
 
@@ -156,13 +157,9 @@ final class ElementorPro_Forms_BigMarker {
             add_action( 'admin_notices', [ $this, 'admin_notice_missing_main_plugin' ] );
             return;
         }
-        if(!class_exists( '\ElementorPro\Modules\Forms\Classes\Action_Base' )){
-            add_action( 'admin_notices', [ $this, 'admin_notice_missing_main_plugin' ] );
-            return;
-        }
 
         // Add Plugin actions
-        require_once('plugin.php');
+        add_action( 'elementor_pro/init', [ $this, 'init_actions' ] );
     }
     /**
      * Admin notice
@@ -179,9 +176,9 @@ final class ElementorPro_Forms_BigMarker {
 
         $message = sprintf(
         /* translators: 1: Plugin name 2: Elementor Pro*/
-            esc_html__( '"%1$s" requires "%2$s" to be installed and activated.', 'elementorpro-form-bigmarker' ),
-            '<strong>' . esc_html__( 'Elementor Pro Form BigMarker', 'elementorpro-form-bigmarker' ) . '</strong>',
-            '<strong>' . esc_html__( 'Elementor Pro', 'elementorpro-form-bigmarker' ) . '</strong>'
+            esc_html__( '"%1$s" requires "%2$s" to be installed and activated.', 'bigmarker-action-for-elementor-pro-forms' ),
+            '<strong>' . esc_html__( 'BigMarker Action for Elementor Pro Forms', 'bigmarker-action-for-elementor-pro-forms' ) . '</strong>',
+            '<strong>' . esc_html__( 'Elementor Pro', 'bigmarker-action-for-elementor-pro-forms' ) . '</strong>'
         );
 
         printf( '<div class="notice notice-warning is-dismissible"><p>%1$s</p></div>', $message );
@@ -203,9 +200,9 @@ final class ElementorPro_Forms_BigMarker {
 
         $message = sprintf(
         /* translators: 1: Plugin name 2: Elementor Pro 3: Required Elementor Pro version */
-            esc_html__( '"%1$s" requires "%2$s" version "%3$s" or greater.', 'elementorpro-form-bigmarker' ),
-            '<strong>' . esc_html__( 'Elementor Pro Form BigMarker', 'elementorpro-form-bigmarker' ) . '</strong>',
-            '<strong>' . esc_html__( 'Elementor Pro', 'elementorpro-form-bigmarker' ) . '</strong>',
+            esc_html__( '"%1$s" requires "%2$s" version "%3$s" or greater.', 'bigmarker-action-for-elementor-pro-forms' ),
+            '<strong>' . esc_html__( 'BigMarker Action for Elementor Pro Forms', 'bigmarker-action-for-elementor-pro-forms' ) . '</strong>',
+            '<strong>' . esc_html__( 'Elementor Pro', 'bigmarker-action-for-elementor-pro-forms' ) . '</strong>',
             self::MINIMUM_ELEMENTOR_VERSION
         );
 
@@ -228,9 +225,9 @@ final class ElementorPro_Forms_BigMarker {
 
         $message = sprintf(
         /* translators: 1: Plugin name 2: PHP 3: Required PHP version */
-            esc_html__( '"%1$s" requires "%2$s" version %3$s or greater.', 'elementorpro-form-bigmarker' ),
-            '<strong>' . esc_html__( 'Elementor Pro Form BigMarker', 'elementorpro-form-bigmarker' ) . '</strong>',
-            '<strong>' . esc_html__( 'PHP', 'elementorpro-form-bigmarker' ) . '</strong>',
+            esc_html__( '"%1$s" requires "%2$s" version %3$s or greater.', 'bigmarker-action-for-elementor-pro-forms' ),
+            '<strong>' . esc_html__( 'BigMarker Action for Elementor Pro Forms', 'bigmarker-action-for-elementor-pro-forms' ) . '</strong>',
+            '<strong>' . esc_html__( 'PHP', 'bigmarker-action-for-elementor-pro-forms' ) . '</strong>',
             self::MINIMUM_PHP_VERSION
         );
 
@@ -238,6 +235,26 @@ final class ElementorPro_Forms_BigMarker {
 
     }
 
+  /**
+   * Init form actions
+   *
+   * Include the after form submit class and register it
+   *
+   * @since 1.1.2
+   *
+   * @access public
+   */
+  public function init_actions() {
+    // Here its safe to include our action class file
+    include_once( 'includes/bigmarker-action-after-submit.php' );
+
+    // Instantiate the action class
+    $bigmarker_action = new BigMarker_Action_After_Submit();
+
+    // Register the action with form widget
+    \ElementorPro\Plugin::instance()->modules_manager->get_modules( 'forms' )->add_form_action( $bigmarker_action->get_name(), $bigmarker_action );
+  }
+
 }
 
-ElementorPro_Forms_BigMarker::instance();
+BigMarker_Action_for_Elementor_Pro_Forms::instance();

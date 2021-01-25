@@ -5,6 +5,11 @@
  * Custom elementor form action after submit to add a subsciber to
  * BigMarker channel and conference via API
  */
+
+if(!class_exists( '\ElementorPro\Modules\Forms\Classes\Action_Base' )){
+	 return;
+}
+
 class BigMarker_Action_After_Submit extends \ElementorPro\Modules\Forms\Classes\Action_Base {
 	/**
 	 * Get Name
@@ -191,13 +196,3 @@ class BigMarker_Action_After_Submit extends \ElementorPro\Modules\Forms\Classes\
 		);
 	}
 }
-add_action( 'elementor_pro/init', function() {
-	// Here its safe to include our action class file
-	include_once( 'elementorpro-form-bigmarker.php' );
-
-	// Instantiate the action class
-	$bigmarker_action = new BigMarker_Action_After_Submit();
-
-	// Register the action with form widget
-	\ElementorPro\Plugin::instance()->modules_manager->get_modules( 'forms' )->add_form_action( $bigmarker_action->get_name(), $bigmarker_action );
-});

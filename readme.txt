@@ -1,10 +1,10 @@
-=== BigMarker support for Elementor Forms ===
+=== BigMarker action for Elementor Pro Forms ===
 Contributors: slapic
 Tags: bigmarker, elementor, forms, webinars, subscription form
 Requires at least: 5.5
 Tested up to: 5.6
 Requires PHP: 7.3
-Stable tag: 1.0.0
+Stable tag: 1.1.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Requires [Elementor Pro](https://elementor.com) 3.0 or greater
@@ -69,6 +69,11 @@ No, you don't and that's the main reason that I created this plugin, so you can 
 
 
 == Changelog ==
+
+= 1.1.2 - 2021-01-25 =
+* Reorganised files into the includes/ dir
+* Only init the class if the relevant Elementor Pro class exists to prevent fatal errors
+* Moved action init to the main class as a public function
 
 = 1.1.1 - 2021-01-22 =
 * Changed name to comply Wordpress restrictions
