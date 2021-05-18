@@ -50,6 +50,9 @@ No, you don't and that's the main reason that I created this plugin, so you can 
 
 ## Changelog
 
+### 1.2.0 - 2021-05-18
+* Add option to set user meta fields to store BigMarker Member ID (BMID) and Conference URL
+
 ### 1.1.2 - 2021-01-25
 * Reorganised files into the includes/ dir
 * Only init the class if the relevant Elementor Pro class exists to prevent fatal errors
