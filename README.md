@@ -50,6 +50,9 @@ No, you don't and that's the main reason that I created this plugin, so you can 
 
 ## Changelog
 
+### 1.2.0 - 2022-03-07
+* Add option to set user meta fields to store BigMarker Member ID (BMID) and Conference URL
+
 ### 1.1.3 - 2022-03-07
 * Compatibility with WordPress 5.9.1 and Elementor Pro 3.6.3
 
