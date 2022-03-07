@@ -50,6 +50,9 @@ No, you don't and that's the main reason that I created this plugin, so you can 
 
 ## Changelog
 
+### 1.2.1 - 2022-03-07
+* FIX: v1.2.0 changes were missing. Added.
+
 ### 1.2.0 - 2022-03-07
 * Add option to set user meta fields to store BigMarker Member ID (BMID) and Conference URL
 

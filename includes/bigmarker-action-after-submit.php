@@ -48,9 +48,10 @@ class BigMarker_Action_After_Submit extends \ElementorPro\Modules\Forms\Classes\
 		$settings = $record->get( 'form_settings' );
 
 		//  Make sure that there is a BigMarker API key
-		if ( empty( $settings['bigmarker_api_key'] ) ) {
-			return;
-		}
+		if ( empty( $settings['bigmarker_api_key'] ) ) return;
+
+		$bigmarker_conference_url_field = empty( $settings['bigmarker_conference_url_field'] ) ? 'bigmarker_conference_url' : $settings['bigmarker_conference_url_field'];
+		$bigmarker_bmid_field = empty( $settings['bigmarker_bmid_field'] ) ? 'bmid' : $settings['bigmarker_bmid_field'];
 
 		// Get submitted Form data
 		$raw_fields = $record->get( 'fields' );
@@ -99,7 +100,7 @@ class BigMarker_Action_After_Submit extends \ElementorPro\Modules\Forms\Classes\
 					return $bigmarker_subscriber_data['error'];
 				}
 				if ( !empty($bigmarker_subscriber_data['bmid']) && is_user_logged_in() ) {
-					update_user_meta( $current_user_id, 'bmid', $bigmarker_subscriber_data['bmid'] );
+					update_user_meta( $current_user_id, $bigmarker_bmid_field, $bigmarker_subscriber_data['bmid'] );
 				}
 			}
 		}
@@ -131,7 +132,7 @@ class BigMarker_Action_After_Submit extends \ElementorPro\Modules\Forms\Classes\
 					return $bigmarker_attendee_data['error'];
 				}
 				if ( !empty($bigmarker_attendee_data['conference_url']) && is_user_logged_in() ) {
-					update_user_meta( $current_user_id, 'bigmarker_conference_url', $bigmarker_attendee_data['conference_url'] );
+					update_user_meta( $current_user_id, $bigmarker_conference_url_field, $bigmarker_attendee_data['conference_url'] );
 				}
 			}
 		}
@@ -175,6 +176,30 @@ class BigMarker_Action_After_Submit extends \ElementorPro\Modules\Forms\Classes\
 				'type' => \Elementor\Controls_Manager::TEXT,
 				'separator' => 'before',
 				'description' => __( 'the channel name you want to subscribe a user to.', 'text-domain' ),
+			]
+		);
+
+		$widget->add_control(
+			'bigmarker_bmid_field',
+			[
+				'label' => __( 'BigMarker Member ID Field name', 'text-domain' ),
+				'type' => \Elementor\Controls_Manager::TEXT,
+				'placeholder' => 'bmid',
+				'label_block' => true,
+				'separator' => 'before',
+				'description' => __( 'Enter local meta field name to store BMID', 'text-domain' ),
+			]
+		);
+
+		$widget->add_control(
+			'bigmarker_conference_url_field',
+			[
+				'label' => __( 'BigMarker Personalized link field', 'text-domain' ),
+				'type' => \Elementor\Controls_Manager::TEXT,
+				'placeholder' => 'bigmarker_conference_url',
+				'label_block' => true,
+				'separator' => 'before',
+				'description' => __( 'Enter local meta field name to store URL', 'text-domain' ),
 			]
 		);
 
