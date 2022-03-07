@@ -50,6 +50,9 @@ No, you don't and that's the main reason that I created this plugin, so you can 
 
 ## Changelog
 
+### 1.1.3 - 2022-03-07
+* Compatibility with WordPress 5.9.1 and Elementor Pro 3.6.3
+
 ### 1.1.2 - 2021-01-25
 * Reorganised files into the includes/ dir
 * Only init the class if the relevant Elementor Pro class exists to prevent fatal errors

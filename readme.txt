@@ -2,7 +2,7 @@
 Contributors: slapic
 Tags: bigmarker, elementor, forms, webinars, subscription form
 Requires at least: 5.5
-Tested up to: 5.6
+Tested up to: 5.9
 Requires PHP: 7.3
 Stable tag: 1.1.2
 License: GPLv3
@@ -69,6 +69,9 @@ No, you don't and that's the main reason that I created this plugin, so you can 
 
 
 == Changelog ==
+
+= 1.1.3 - 2022-03-07 =
+* Compatibility with WordPress 5.9.1 and Elementor Pro 3.6.3
 
 = 1.1.2 - 2021-01-25 =
 * Reorganised files into the includes/ dir
